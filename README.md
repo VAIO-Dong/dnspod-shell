@@ -1,6 +1,7 @@
-# ArDNSPod
+# ArDNSPod (for DSM 7.0 arm)
 
 基于 DNSPod 用户 API 实现的纯 Shell 动态域名客户端，优先适配网卡地址，无法获得合法外网地址则使用外部接口获取 IP 地址
+相比原版更改了获取hostip的方式以适配arm版DSM 7.0
 
 # 使用方法
 
@@ -32,6 +33,11 @@ echo "arDdnsCheck test.org subdomain" >> ./ardnspod
 ```
 
 # 最近更新
+
+2022/01/14 (@VAIO_Dong)
+
+- 原有的筛选和排序逻辑在我自己的群晖上似乎有点问题 重启光猫之后不会获取到最新的IPv6地址然后更新上去 然后就改了一版自己用的
+- 此更改仅在DSM 7.0上测试过（DS119j/DS120j/刷了DS120j的猫盘）
 
 2021/11/25
 
