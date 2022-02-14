@@ -71,14 +71,9 @@ arWanIp6() {
 
     local lanIps="(^$)|(^::1$)|(^[fF][eE][8-9a-fA-F])"
 
-    case $(uname) in
-        'Linux')
-            hostIp=$(ip -o -6 addr list | grep -Ev '\s(docker|lo)' | awk '{print $4,substr($NF,0,length($NF)-3)}' | sed 's/fore/2592000/g' | sort -k 2 -n | cut -d/ -f1 | grep -Ev "$lanIps" | head -n 1)
-        ;;
-        Darwin|FreeBSD)
-            hostIp=$(ifconfig | grep "inet6 " | awk '{print $2}' | grep -Ev "$lanIps" | head -n 1)
-        ;;
-    esac
+    hostIp=$(ip -o -6 addr list | grep -Ev '\s(docker|lo)' | awk '{print $4,substr($NF,0,length($NF)-3)}' | sed 's/fore/2592000/g' | cut -d/ -f1 | head -n 1)
+    #原有逻辑在群晖上好像会抓不到IPv6地址（ip -o -6 addr list | grep -Ev '\s(docker|lo)' | awk '{print $4,substr($NF,0,length($NF)-3)}' | sed 's/fore/2592000/g' | sort -k 2 -n | cut -d/ -f1 | grep -Ev "$lanIps" | head -n 1）
+    #原有逻辑是根据IPv6地址的第三段来排序 不是很明白为什么这么做 在光猫重启之后会排序出来一个老的不可用的IPv6地址 Shell默认打印出来的地址似乎已经是按照剩余时间（或者是最新的获取时间）从上到下排序
 
     if [ -z "$hostIp" ]; then
         if type wget >/dev/null 2>&1; then
